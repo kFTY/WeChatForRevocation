@@ -7,7 +7,9 @@ from execution import Execution
 from keywordlistener import KeywordListener
 from log import Log
 from revocation import Revocation
-
+import sys
+reload(sys)  
+sys.setdefaultencoding('utf-8')
 
 # 将接收到的消息存放在字典中，当接收到新消息时对字典中超时的消息进行清理
 # 没有注册note（通知类）消息，通知类消息一般为：红包 转账 消息撤回提醒等，不具有撤回功能

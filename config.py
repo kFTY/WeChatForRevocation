@@ -1,14 +1,14 @@
 # -*-encoding:utf-8-*-
 import os
 
-CONFIG_PATH = ".\\config.txt"
+CONFIG_PATH = "./config.txt"
 
 
 class Config:
     def __init__(self):
         if not os.path.exists(CONFIG_PATH):
-            with open(CONFIG_PATH, "w")as fw:
-                fw.write("关键词1#关键词2#关键词n#")  # 每个关键词后面带#，这是标准格式
+            with open(CONFIG_PATH, "w") as fw:
+                fw.write("教会#团契#jccg#")  # 每个关键词后面带#，这是标准格式
 
     def GetKeyword(self):
         with open(CONFIG_PATH, "r")as fr:

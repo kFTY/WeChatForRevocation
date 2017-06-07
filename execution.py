@@ -1,3 +1,5 @@
+# -*-encoding:utf-8-*-
+
 import os
 import re
 import itchat
@@ -5,7 +7,7 @@ from config import Config
 
 
 class Execution:
-    REVOCATIONPATH = ".\\Revocation\\"
+    REVOCATIONPATH = "./Revocation/"
 
     def __init__(self):
         pass
@@ -19,7 +21,7 @@ class Execution:
         #"%s%s%s%s%s关键词" % ("=" * 4, "Command Message", "=" * 4, "\n\n", action)
         config = Config()
         command = message['Text']
-        # print("command:", command)
+        print("命令："+command)
         if re.search(r"(.*?)文件\[(.*?)\]", command):
             action, filename = re.search(r"(.*?)文件\[(.*?)\]", command).group(1, 2)
             self.ViewDeleteFile(action, filename)
@@ -37,14 +39,14 @@ class Execution:
                 else:
                     msg_send += "失败，请重试"
             itchat.send(msg_send, toUserName='filehelper')
-        elif re.match(r"^撤回附件列表$", command):
+        elif command ==  "撤回附件列表":
             self.ReturnAttachmentList()
-        elif re.match(r"^清空附件列表$", command):
+        elif command == "清空附件列表":
             self.ClearAttachmentList()
-        elif re.match("^查看关键词$", command):
+        elif command == "查看关键词":
             msg_send = config.ShowKeyword()
             itchat.send(msg_send, toUserName='filehelper')
-        elif re.match("^清空关键词$", command):
+        elif command == "清空关键词":
             if config.ClearKeyword():
                 msg_send = "清空关键词成功"
             else:
@@ -81,13 +83,13 @@ class Execution:
             else:
                 msg_type = "fil"
 
-            itchat.send("@%s@%s" % (msg_type, r".\\Revocation\\" + filename),
+            itchat.send("@%s@%s" % (msg_type, r"./Revocation/" + filename),
                         toUserName="filehelper")
 
         elif action == r"删除":
             try:
-                if os.path.exists(r".\\Revocation\\" + filename):
-                    os.remove(r".\\Revocation\\" + filename)
+                if os.path.exists(r"./Revocation/" + filename):
+                    os.remove(r"./Revocation/" + filename)
                     itchat.send("%s%s%s%s撤回助手：删除附件成功" % ("=" * 4, "Command Message", "=" * 4, "\n\n"), toUserName='filehelper')
                 return
             except:

@@ -10,10 +10,10 @@ class Revocation:
     msg_store = {}
 
     def __init__(self):
-        if not os.path.exists(".\\Cache\\"):
-            os.mkdir(".\\Cache\\")
-        if not os.path.exists(".\\Revocation\\"):
-            os.mkdir(".\\Revocation\\")
+        if not os.path.exists("./Cache/"):
+            os.mkdir("./Cache/")
+        if not os.path.exists("./Revocation/"):
+            os.mkdir("./Revocation/")
 
     # ClearTimeOutMsg用于清理消息字典，把超时消息清理掉
     # 为减少资源占用，此函数只在有新消息动态时调用
@@ -29,7 +29,7 @@ class Revocation:
 
                     # 可下载类消息，并删除相关文件
                     if item['msg_type'] in ['Picture', 'Recording', 'Video', 'Attachment']:
-                        os.remove(".\\Cache\\" + item['msg_content'])
+                        os.remove("./Cache/" + item['msg_content'])
 
     def GetOldMsg(self, msg):
         """
@@ -71,6 +71,7 @@ class Revocation:
             msg_group += r'[ '
             msg_group += itchat.search_chatrooms(userName=msg['FromUserName'])['NickName']
             msg_group += r' ]'
+        print (msg_from + " 道：")
         return msg_from, msg_group
 
     def SaveMsg(self, msg):
@@ -88,10 +89,11 @@ class Revocation:
         # 图片 语音 附件 视频，可下载消息将内容下载暂存到当前目录
         if msg['Type'] == 'Text':
             msg_content = msg['Text']
+            print (msg_content) 
         elif msg['Type'] == 'Picture':
             msg_content = msg['FileName']
             msg['Text'](msg['FileName'])
-            shutil.move(msg_content, r".\\Cache\\")
+            shutil.move(msg_content, r"./Cache/")
         elif msg['Type'] == 'Card':
             msg_content = msg['RecommendInfo']['NickName'] + r" 的名片"
         elif msg['Type'] == 'Map':
@@ -108,15 +110,15 @@ class Revocation:
         elif msg['Type'] == 'Recording':
             msg_content = msg['FileName']
             msg['Text'](msg['FileName'])
-            shutil.move(msg_content, r".\\Cache\\")
+            shutil.move(msg_content, "./Cache/")
         elif msg['Type'] == 'Attachment':
             msg_content = msg['FileName']
             msg['Text'](msg['FileName'])
-            shutil.move(msg_content, r".\\Cache\\")
+            shutil.move(msg_content, "./Cache/")
         elif msg['Type'] == 'Video':
             msg_content = msg['FileName']
             msg['Text'](msg['FileName'])
-            shutil.move(msg_content, r".\\Cache\\")
+            shutil.move(msg_content, "./Cache/")
         elif msg['Type'] == 'Friends':
             msg_content = msg['Text']
 
@@ -136,12 +138,12 @@ class Revocation:
             old_msg.get('msg_type', None), "\n\n", old_msg.get('msg_content', None), "\n\n")
 
         if old_msg['msg_type'] == "Sharing":
-            msg_send += r"Url: %s%s" % (old_msg.get('msg_url', None), "\n\n")
+            msg_send += "Url: %s%s" % (old_msg.get('msg_url', None), "\n\n")
 
         elif old_msg['msg_type'] in ['Picture', 'Recording', 'Video', 'Attachment']:
-            msg_send += r"Store: Revocation文件夹中%sCommmand: 查看文件[%s]" % (
+            msg_send += "Store: Revocation文件夹中%sCommmand: 查看文件[%s]" % (
                 "\n\n", old_msg.get('msg_content', None))
-            shutil.move(r".\\Cache\\" + old_msg['msg_content'], r".\\Revocation\\")
+            shutil.move("./Cache/" + old_msg['msg_content'], "./Revocation/")
         return msg_send
 
     def Revocation(self, msg):
@@ -156,8 +158,8 @@ class Revocation:
             mytime.tm_min.__str__(), mytime.tm_sec.__str__())
 
         # 创建可下载消息内容的存放文件夹，并将暂存在当前目录的文件移动到该文件中
-        if not os.path.exists(".\\Revocation\\"):
-            os.mkdir(".\\Revocation\\")
+        if not os.path.exists("./Revocation/"):
+            os.mkdir("./Revocation/")
 
         msg_id, old_msg = self.GetOldMsg(msg)
         if old_msg:
